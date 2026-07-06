@@ -581,6 +581,51 @@
         </div>
       </section>
 
+      <!-- COMBOS DE DULCERÍA -->
+      <section id="dulceria" style="padding-top:160px">
+        <div style="position:relative;margin-bottom:40px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--primary)">Antes de la función</div>
+          <h2 class="cdc-disp" style="margin:8px 0 0;font-size:60px;letter-spacing:0px;color:#fff">Combos de dulcería</h2>
+          <div style="width:64px;height:4px;background:var(--primary);margin-top:12px;border-radius:2px"></div>
+        </div>
+        <div class="cdc-exp-grid" style="display:grid;gap:20px;grid-template-columns:repeat(3,1fr)">
+          <sc-for list="{{ snackCombos }}" as="sc" hint-placeholder-count="3">
+            <div class="cdc-exp-card">
+              <div class="cdc-exp-blob"></div>
+              <div style="position:relative">
+                <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--primary)">Combo taquilla {{ sc.num }}</span>
+                <div class="cdc-disp" style="margin-top:12px;font-size:58px;letter-spacing:0px;color:var(--primary)">{{ sc.priceLabel }}</div>
+                <p style="margin-top:16px;font-size:14px;line-height:1.65;color:var(--gray)">{{ sc.desc }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- PRECIOS DE BOLETOS -->
+      <section id="precios" style="padding-top:160px">
+        <div style="position:relative;margin-bottom:40px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--primary)">Boletos</div>
+          <h2 class="cdc-disp" style="margin:8px 0 0;font-size:60px;letter-spacing:0px;color:#fff">Precios</h2>
+          <div style="width:64px;height:4px;background:var(--primary);margin-top:12px;border-radius:2px"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <sc-for list="{{ ticketPrices }}" as="tp" hint-placeholder-count="2">
+            <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);padding:32px">
+              <div class="cdc-disp" style="font-size:28px;letter-spacing:1px;color:var(--primary)">{{ tp.format }}</div>
+              <div style="margin-top:24px;display:flex;flex-direction:column;gap:16px">
+                <sc-for list="{{ tp.rows }}" as="r" hint-placeholder-count="3">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--border);padding-top:16px">
+                    <span style="font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--gray)">{{ r.label }}</span>
+                    <span class="cdc-disp" style="font-size:26px;color:#fff">{{ r.priceLabel }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
       <!-- PROMO -->
       <section id="promociones" style="padding-top:160px;padding-bottom:160px">
         <div style="position:relative;overflow:hidden;border-radius:28px;border:1px solid color-mix(in oklab,var(--primary) 30%,transparent);background:var(--blue);padding:64px">
@@ -596,6 +641,25 @@
               <button onClick="{{ buyFeatured }}" class="cdc-btn-primary" style="padding:15px 30px;font-size:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>Aprovechar promo</button>
               <span style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gray)">Aplican términos y condiciones</span>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- UBICACIÓN -->
+      <section id="ubicacion" style="padding-top:160px;padding-bottom:160px">
+        <div style="position:relative;margin-bottom:40px">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--primary)">Visítanos</div>
+          <h2 class="cdc-disp" style="margin:8px 0 0;font-size:60px;letter-spacing:0px;color:#fff">Ubicación</h2>
+          <div style="width:64px;height:4px;background:var(--primary);margin-top:12px;border-radius:2px"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:start">
+          <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);padding:32px">
+            <div class="cdc-disp" style="font-size:30px;letter-spacing:0px;color:#fff">CineMAS del Country</div>
+            <p style="margin-top:16px;font-size:15px;line-height:1.7;color:var(--gray)">Av. Felipe Sevilla del Río 201, Int. 64<br>Colima, Col.<br>Tel: (312) 312 01 73</p>
+            <div style="margin-top:20px;display:inline-flex;align-items:center;gap:8px;border-radius:30px;border:1px solid color-mix(in oklab, var(--primary) 40%, transparent);background:color-mix(in oklab, var(--primary) 10%, transparent);padding:8px 16px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--primary)">Plaza Country</div>
+          </div>
+          <div style="border-radius:22px;overflow:hidden;border:1px solid var(--border)">
+            <iframe title="Ubicación Cinemas del Country" src="https://www.google.com/maps?q=Plaza+Country,+Av.+Felipe+Sevilla+del+R%C3%ADo+201,+Colima,+Col.&output=embed" style="width:100%;height:360px;border:0;display:block" loading="lazy"></iframe>
           </div>
         </div>
       </section>
@@ -1402,6 +1466,23 @@ class Component extends DCLogic {
         { name:'IMAX', tag:'Sensorial', desc:'Pantalla gigante y sonido envolvente de última generación.' },
         { name:'4DX', tag:'Inmersivo', desc:'Asientos en movimiento, viento, agua y aromas en sincronía con la película.' },
         { name:'VIP', tag:'Premium', desc:'Salas exclusivas con butacas reclinables y servicio en sala.' },
+      ],
+      snackCombos: [
+        { num:'7', priceLabel:this.mxn(139), desc:'1 Palomitas mediana + Refresco mediano' },
+        { num:'8', priceLabel:this.mxn(158), desc:'1 Palomitas mediana + ICEE chico' },
+        { num:'9', priceLabel:this.mxn(168), desc:'1 Palomitas jumbo + Refresco grande' },
+      ],
+      ticketPrices: [
+        { format:'PRECIOS 2D', rows:[
+          { label:'General', priceLabel:this.mxn(85) },
+          { label:'Niños', priceLabel:this.mxn(69) },
+          { label:'3ra. edad', priceLabel:this.mxn(69) },
+        ]},
+        { format:'PRECIOS 3D', rows:[
+          { label:'General', priceLabel:this.mxn(95) },
+          { label:'Niños', priceLabel:this.mxn(79) },
+          { label:'3ra. edad', priceLabel:this.mxn(79) },
+        ]},
       ],
       footerCols: [
         { title:'Cartelera', links:['Hoy','Próximamente','Avant Premiere','Festivales'] },
