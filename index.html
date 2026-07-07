@@ -979,9 +979,119 @@
     </div>
 
     <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--primary)">Panel del cine</div>
-    <h1 class="cdc-disp" style="margin:8px 0 6px;font-size:48px;letter-spacing:1px;color:#fff">Pagos y transferencias</h1>
-    <p style="margin:0 0 36px;font-size:15px;color:var(--gray);max-width:46rem">Conecta la cuenta bancaria del cine para que el dinero de cada venta con tarjeta caiga directo a tu banco.</p>
+    <sc-if value="{{ isPayoutsTabCartelera }}" hint-placeholder-val="{{ true }}">
+      <h1 class="cdc-disp" style="margin:8px 0 6px;font-size:48px;letter-spacing:1px;color:#fff">Administrar cartelera</h1>
+      <p style="margin:0 0 24px;font-size:15px;color:var(--gray);max-width:46rem">Agrega, edita o elimina las películas que se muestran en el sitio.</p>
+    </sc-if>
+    <sc-if value="{{ isPayoutsTabPagos }}" hint-placeholder-val="{{ false }}">
+      <h1 class="cdc-disp" style="margin:8px 0 6px;font-size:48px;letter-spacing:1px;color:#fff">Pagos y transferencias</h1>
+      <p style="margin:0 0 24px;font-size:15px;color:var(--gray);max-width:46rem">Conecta la cuenta bancaria del cine para que el dinero de cada venta con tarjeta caiga directo a tu banco.</p>
+    </sc-if>
 
+    <div style="display:flex;gap:10px;margin-bottom:36px;border-bottom:1px solid var(--border);padding-bottom:20px">
+      <sc-for list="{{ payoutsTabsVm }}" as="pt" hint-placeholder-count="2">
+        <button onClick="{{ pt.onClick }}" style="{{ pt.style }}">{{ pt.label }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ isPayoutsTabCartelera }}" hint-placeholder-val="{{ true }}">
+      <sc-if value="{{ showMovieList }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+          <button onClick="{{ openAddMovie }}" class="cdc-btn-primary" style="padding:11px 20px;font-size:12px;">+ Agregar película</button>
+        </div>
+        <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);overflow:hidden">
+          <sc-for list="{{ adminMoviesVm }}" as="am" hint-placeholder-count="7">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+              <div>
+                <div style="font-size:15px;font-weight:800;color:#fff">{{ am.title }}</div>
+                <div style="margin-top:4px;font-size:12px;color:var(--gray)">{{ am.meta }}</div>
+              </div>
+              <sc-if value="{{ am.isConfirmingDelete }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:12px;color:var(--gray)">¿Eliminar esta película?</span>
+                  <button onClick="{{ am.onConfirmDelete }}" style="cursor:pointer;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;border:none;background:var(--gradRed);color:#fff;box-shadow:var(--shadowRed)">Sí, eliminar</button>
+                  <button onClick="{{ am.onCancelDelete }}" style="{{ adminActionBtn }}">Cancelar</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ am.isNotConfirmingDelete }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <button onClick="{{ am.onEdit }}" style="{{ adminActionBtn }}">Editar</button>
+                  <button onClick="{{ am.onAskDelete }}" style="{{ adminActionBtn }};color:var(--primary);border-color:color-mix(in oklab,var(--primary) 40%,transparent)">Eliminar</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:24px">
+          <button onClick="{{ restoreDefaultCartelera }}" style="border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);text-decoration:underline">Restaurar cartelera original</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showMovieForm }}" hint-placeholder-val="{{ false }}">
+        <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);padding:28px;max-width:640px">
+          <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:18px">Datos de la película</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Título *</label>
+              <input value="{{ movieForm.title }}" onChange="{{ onMovieTitle }}" placeholder="Título de la película" style="{{ inputStyle }}" />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Género</label>
+                <input value="{{ movieForm.genre }}" onChange="{{ onMovieGenre }}" placeholder="Animación, Terror…" style="{{ inputStyle }}" />
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Duración</label>
+                <input value="{{ movieForm.duration }}" onChange="{{ onMovieDuration }}" placeholder="1h 42m" style="{{ inputStyle }}" />
+              </div>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Clasificación</label>
+              <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">
+                <sc-for list="{{ movieFormRatingOptions }}" as="rt" hint-placeholder-count="6">
+                  <button onClick="{{ rt.onClick }}" style="{{ rt.style }}">{{ rt.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Calificación (0-10)</label>
+                <input value="{{ movieForm.score }}" onChange="{{ onMovieScore }}" placeholder="8.5" style="{{ inputStyle }}" />
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Sala</label>
+                <input value="{{ movieForm.sala }}" onChange="{{ onMovieSala }}" placeholder="1" style="{{ inputStyle }}" />
+              </div>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Formatos (separados por coma)</label>
+              <input value="{{ movieForm.formats }}" onChange="{{ onMovieFormats }}" placeholder="ESP 2D, ESP 3D" style="{{ inputStyle }}" />
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Horarios (separados por coma) *</label>
+              <input value="{{ movieForm.schedule }}" onChange="{{ onMovieSchedule }}" placeholder="12:15, 3:15, 6:15" style="{{ inputStyle }}" />
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Ruta del póster</label>
+              <input value="{{ movieForm.poster }}" onChange="{{ onMoviePoster }}" placeholder="posters/archivo.png" style="{{ inputStyle }}" />
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Sinopsis</label>
+              <textarea value="{{ movieForm.synopsis }}" onChange="{{ onMovieSynopsis }}" placeholder="Sinopsis de la película" style="{{ inputStyle }};min-height:80px;resize:vertical;font-family:inherit"></textarea>
+            </div>
+          </div>
+          <sc-if value="{{ movieFormError }}">
+            <div style="margin-top:14px;padding:10px 14px;border-radius:8px;background:oklch(0.60 0.235 25 / 0.12);border:1px solid oklch(0.60 0.235 25 / 0.4);font-size:12px;color:#ffaaaa">{{ movieFormError }}</div>
+          </sc-if>
+          <div style="display:flex;gap:10px;margin-top:22px">
+            <button onClick="{{ saveMovieForm }}" class="cdc-btn-primary" style="padding:12px 24px;font-size:12px;">Guardar</button>
+            <button onClick="{{ closeMovieForm }}" style="{{ adminActionBtn }};padding:12px 24px;">Cancelar</button>
+          </div>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isPayoutsTabPagos }}" hint-placeholder-val="{{ false }}">
     <sc-if value="{{ bankNotConnected }}" hint-placeholder-val="{{ true }}">
     <div style="display:grid;grid-template-columns:1fr 420px;gap:42px;align-items:start">
       <div style="display:flex;flex-direction:column;gap:16px">
@@ -1066,6 +1176,7 @@
       </sc-for>
       <div style="padding:16px 24px;font-size:11px;color:var(--gray)">Se descuenta una comisión de 3.5% por procesamiento de tarjeta. El resto se deposita a tu CLABE.</div>
     </div>
+    </sc-if>
     </sc-if>
   </main>
   </sc-if>
@@ -1152,6 +1263,12 @@ class Component extends DCLogic {
     selectedCombo: null,
     seatTypes: {},
     selectedSala: null,
+    payoutsTab: 'cartelera',
+    movieForm: null,
+    movieFormEditIdx: null,
+    movieFormError: '',
+    deleteConfirmIdx: null,
+    cartaleraVersion: 0,
     form: { name: '', email: '', card: '', expiry: '', cvv: '' },
     formError: '',
     payProcessing: false,
@@ -1177,6 +1294,21 @@ class Component extends DCLogic {
   };
 
   movieData() {
+    return this._loadStoredMovies() || this._defaultMovieData();
+  }
+  _loadStoredMovies() {
+    try {
+      const raw = localStorage.getItem('cdc_cartelera');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return (Array.isArray(parsed) && parsed.length) ? parsed : null;
+    } catch(e) { return null; }
+  }
+  _saveStoredMovies(movies) {
+    try { localStorage.setItem('cdc_cartelera', JSON.stringify(movies)); } catch(e) {}
+    this.setState(s => ({ cartaleraVersion: (s.cartaleraVersion||0) + 1 }));
+  }
+  _defaultMovieData() {
     return [
       { title:'Toy Story 5', genre:'Animación', duration:'1h 42m', rating:'AA', score:'9.0', sala:'1', formats:['ESP 2D','ESP 3D'], poster:'posters/toystory.png', schedule:['12:15','1:15','2:15','3:15','4:30','5:30','6:30','7:30','8:30','9:15'], synopsis:'Woody, Buzz y los amigos de Andy se enfrentan a nuevos cambios y aventuras que pondrán a prueba su amistad.' },
       { title:'Leviticus: Ritual de Sangre', genre:'Terror', duration:'1h 28m', rating:'B15', score:'7.4', sala:'5', formats:['ESP'], poster:'posters/leviticus.png', schedule:['6:00','7:40','9:20'], synopsis:'Un antiguo ritual convoca fuerzas oscuras que amenazan con consumir todo a su paso.' },
@@ -1237,6 +1369,55 @@ class Component extends DCLogic {
   removeCombo = () => this.setState({ selectedCombo: null }, this._pushHistory);
   goPayouts = () => { this.setState({ screen: this.state.ownerAuth ? 'payouts' : 'login', pin:'', pinError:false }, this._pushHistory); window.scrollTo(0,0); };
   lockOwner = () => { this.setState({ ownerAuth:false, screen:'home' }, this._pushHistory); window.scrollTo(0,0); };
+  setPayoutsTab = (tab) => this.setState({ payoutsTab: tab });
+  openAddMovie = () => this.setState({
+    movieForm: { title:'', genre:'', duration:'', rating:'AA', score:'', sala:'', formats:'', schedule:'', synopsis:'', poster:'' },
+    movieFormEditIdx: null, movieFormError:'',
+  });
+  openEditMovie = (idx) => {
+    const m = this.movieData()[idx];
+    this.setState({
+      movieForm: {
+        title: m.title||'', genre: m.genre||'', duration: m.duration||'', rating: m.rating||'AA', score: m.score||'',
+        sala: m.sala||'', formats: (m.formats||[]).join(', '), schedule: (m.schedule||[]).join(', '),
+        synopsis: m.synopsis||'', poster: m.poster||'',
+      },
+      movieFormEditIdx: idx, movieFormError:'',
+    });
+  };
+  closeMovieForm = () => this.setState({ movieForm:null, movieFormEditIdx:null, movieFormError:'' });
+  setMovieFormField = (field, val) => this.setState(s => ({ movieForm: { ...s.movieForm, [field]: val } }));
+  saveMovieForm = () => {
+    const f = this.state.movieForm;
+    if (!f.title.trim() || !f.schedule.trim()) {
+      this.setState({ movieFormError: 'Título y horarios son obligatorios.' });
+      return;
+    }
+    const movies = [...this.movieData()];
+    const newMovie = {
+      title: f.title.trim(), genre: f.genre.trim(), duration: f.duration.trim(),
+      rating: f.rating, score: f.score.trim(), sala: f.sala.trim(),
+      formats: f.formats.split(',').map(s=>s.trim()).filter(Boolean),
+      schedule: f.schedule.split(',').map(s=>s.trim()).filter(Boolean),
+      synopsis: f.synopsis.trim(), poster: f.poster.trim(),
+    };
+    if (this.state.movieFormEditIdx !== null) movies[this.state.movieFormEditIdx] = newMovie;
+    else movies.push(newMovie);
+    this._saveStoredMovies(movies);
+    this.setState({ movieForm:null, movieFormEditIdx:null, movieFormError:'' });
+  };
+  askDeleteMovie = (idx) => this.setState({ deleteConfirmIdx: idx });
+  cancelDeleteMovie = () => this.setState({ deleteConfirmIdx: null });
+  confirmDeleteMovie = (idx) => {
+    const movies = [...this.movieData()];
+    movies.splice(idx, 1);
+    this._saveStoredMovies(movies);
+    this.setState({ deleteConfirmIdx: null });
+  };
+  restoreDefaultCartelera = () => {
+    try { localStorage.removeItem('cdc_cartelera'); } catch(e) {}
+    this.setState(s => ({ cartaleraVersion: (s.cartaleraVersion||0) + 1 }));
+  };
   pressPin = (d) => {
     this.setState(s => (s.pin.length>=4 ? null : { pin:s.pin+d, pinError:false }), () => {
       if (this.state.pin.length===4) setTimeout(() => {
@@ -1578,6 +1759,35 @@ class Component extends DCLogic {
       }
     } catch(e) {}
 
+    // ── payouts / cartelera admin tabs ──
+    const payoutsTab = this.state.payoutsTab;
+    const tabPillStyle = (active) => `cursor:pointer;border:1px solid ${active?'var(--primary)':'var(--border)'};background:${active?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${active?'#fff':'var(--gray)'};border-radius:30px;padding:9px 20px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px`;
+    const payoutsTabsVm = [
+      { id:'cartelera', label:'Cartelera', onClick:()=>this.setPayoutsTab('cartelera'), style:tabPillStyle(payoutsTab==='cartelera') },
+      { id:'pagos', label:'Pagos', onClick:()=>this.setPayoutsTab('pagos'), style:tabPillStyle(payoutsTab==='pagos') },
+    ];
+    const isPayoutsTabCartelera = payoutsTab === 'cartelera';
+    const isPayoutsTabPagos = payoutsTab === 'pagos';
+
+    const movieForm = this.state.movieForm;
+    const showMovieForm = !!movieForm;
+    const showMovieList = !movieForm;
+    const adminActionBtn = 'cursor:pointer;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border:1px solid var(--border);background:transparent;color:var(--gray)';
+    const adminMoviesVm = movies.map((m, idx) => ({
+      title: m.title, meta: `${m.genre} · ${m.duration} · Sala ${m.sala}`,
+      isConfirmingDelete: this.state.deleteConfirmIdx === idx,
+      isNotConfirmingDelete: this.state.deleteConfirmIdx !== idx,
+      onEdit: () => this.openEditMovie(idx),
+      onAskDelete: () => this.askDeleteMovie(idx),
+      onCancelDelete: this.cancelDeleteMovie,
+      onConfirmDelete: () => this.confirmDeleteMovie(idx),
+    }));
+    const ratingChoices = ['AA','A','B','B15','C','TBC'];
+    const movieFormRatingOptions = movieForm ? ratingChoices.map(r => ({
+      label: r, onClick: () => this.setMovieFormField('rating', r),
+      style: `cursor:pointer;border-radius:8px;padding:8px 4px;font-size:11px;font-weight:800;border:1.5px solid ${movieForm.rating===r?'var(--primary)':'var(--border)'};background:${movieForm.rating===r?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${movieForm.rating===r?'#fff':'var(--gray)'}`,
+    })) : [];
+
     // ── payouts / bank ──
     const banks = [
       { id:'bbva', name:'BBVA' }, { id:'banorte', name:'Banorte' },
@@ -1706,6 +1916,20 @@ class Component extends DCLogic {
         { num:'2', title:'Depósitos el mismo día', desc:'Las ventas del día caen a tu banco automáticamente, todos los días.' },
         { num:'3', title:'Todo en un panel', desc:'Consulta cuánto has recibido y el detalle de cada transferencia.' },
       ],
+      payoutsTabsVm, isPayoutsTabCartelera, isPayoutsTabPagos,
+      movieForm, showMovieForm, showMovieList, movieFormError: this.state.movieFormError,
+      movieFormRatingOptions, adminMoviesVm, adminActionBtn,
+      openAddMovie: this.openAddMovie, closeMovieForm: this.closeMovieForm, saveMovieForm: this.saveMovieForm,
+      restoreDefaultCartelera: this.restoreDefaultCartelera,
+      onMovieTitle: (e) => this.setMovieFormField('title', e.target.value),
+      onMovieGenre: (e) => this.setMovieFormField('genre', e.target.value),
+      onMovieDuration: (e) => this.setMovieFormField('duration', e.target.value),
+      onMovieScore: (e) => this.setMovieFormField('score', e.target.value),
+      onMovieSala: (e) => this.setMovieFormField('sala', e.target.value),
+      onMovieFormats: (e) => this.setMovieFormField('formats', e.target.value),
+      onMovieSchedule: (e) => this.setMovieFormField('schedule', e.target.value),
+      onMovieSynopsis: (e) => this.setMovieFormField('synopsis', e.target.value),
+      onMoviePoster: (e) => this.setMovieFormField('poster', e.target.value),
       banksVm, canConnect, connectBtnStyle,
       bankFormHolder: bf.holder, bankFormClabe: bf.clabe,
       clabeCountLabel: `${bf.clabe.length}/18 dígitos`,
