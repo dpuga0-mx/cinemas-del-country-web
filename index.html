@@ -1256,8 +1256,8 @@ class Component extends DCLogic {
     window.scrollTo(0,0);
   };
   disconnectBank = () => this.setState({ bankConnected:false, bankInfo:null });
-  selectCard = () => this.setState({ payMethod:'card' });
-  selectSpei = () => this.setState({ payMethod:'spei' });
+  selectCard = () => this.setState({ payMethod:'card' }, this._replaceHistory);
+  selectSpei = () => this.setState({ payMethod:'spei' }, this._replaceHistory);
   copyClabe = () => {
     try { navigator.clipboard && navigator.clipboard.writeText('012180012345678905'); } catch(e) {}
     this.setState({ copied:true });
@@ -1274,7 +1274,7 @@ class Component extends DCLogic {
     else this.setState({ calMonth: calMonth + 1 });
   };
   toggleCal = () => this.setState(s => ({ calOpen: !s.calOpen }));
-  selectDate = (year, month, day) => this.setState({ selectedDate: { year, month, day }, calOpen: false });
+  selectDate = (year, month, day) => this.setState({ selectedDate: { year, month, day }, calOpen: false }, this._replaceHistory);
   toggleSeat = (id) => this.setState(s => {
     if (s.seats.includes(id)) {
       const seatTypes = { ...s.seatTypes };
@@ -1282,9 +1282,9 @@ class Component extends DCLogic {
       return { seats: s.seats.filter(x=>x!==id), seatTypes };
     }
     return { seats: [...s.seats, id], seatTypes: { ...s.seatTypes, [id]: 'general' } };
-  });
-  setSeatType = (id, type) => this.setState(s => ({ seatTypes: { ...s.seatTypes, [id]: type } }));
-  selectSala = (n) => this.setState({ selectedSala: n });
+  }, this._replaceHistory);
+  setSeatType = (id, type) => this.setState(s => ({ seatTypes: { ...s.seatTypes, [id]: type } }), this._replaceHistory);
+  selectSala = (n) => this.setState({ selectedSala: n }, this._replaceHistory);
   setForm = (field, val) => this.setState(s => ({ form: { ...s.form, [field]: val }, formError: '' }));
   goCheckout = () => { if (this.state.seats.length) { this.setState({ screen:'checkout', formError: '' }, this._pushHistory); window.scrollTo(0,0); } };
   backToSeats = () => { this.setState({ screen:'seats' }, this._pushHistory); window.scrollTo(0,0); };
@@ -1327,6 +1327,7 @@ class Component extends DCLogic {
       else history.pushState(snapshot, '', location.pathname);
     } catch(e) {}
   };
+  _replaceHistory = () => this._pushHistory(true);
   _onPopState = (e) => {
     if (e.state) this.setState(e.state);
     else this.setState({ screen:'home' });
