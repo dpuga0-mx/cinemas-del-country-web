@@ -287,6 +287,8 @@
     .cdc-promo-btns{align-items:flex-start !important}
     .cdc-footer-grid{grid-template-columns:1fr 1fr !important;padding:36px 24px !important;gap:28px !important}
     .cdc-checkout-grid{grid-template-columns:1fr !important}
+    .cdc-precios-grid{grid-template-columns:1fr !important}
+    .cdc-ubicacion-grid{grid-template-columns:1fr !important}
     .cdc-checkout-main{padding:24px 24px 80px !important}
   }
 
@@ -303,6 +305,7 @@
     .cdc-hero-btns button{width:100% !important}
     .cdc-header-buy{display:none !important}
     .cdc-exp-grid{grid-template-columns:1fr !important}
+    .cdc-exp-card{padding:28px !important}
     .cdc-footer-grid{grid-template-columns:1fr !important;padding:28px 16px !important}
     .cdc-seat-main{padding:20px 16px 120px !important}
     .cdc-seat-scroll{overflow-x:auto !important;-webkit-overflow-scrolling:touch !important;padding-bottom:8px !important}
@@ -360,12 +363,8 @@
           <a href="#" aria-label="Instagram" class="cdc-icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
         </div>
 
-        <a href="#" onClick="{{ goHome }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;transition:transform .2s" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
-          <img src="cinemas-logo.png" alt="Cinemas del Country" style="width:62px;height:62px;object-fit:contain;filter:drop-shadow(var(--shadowRed))" />
-          <div style="text-align:center;line-height:1">
-            <div class="cdc-disp" style="font-size:26px;letter-spacing:1.5px;color:#fff">cine<span style="color:var(--primary)">mas</span></div>
-            <div style="margin-top:3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:5px;color:var(--gray)">del country</div>
-          </div>
+        <a href="#" onClick="{{ goHome }}" style="display:flex;align-items:center;text-decoration:none;transition:transform .2s" onmouseenter="this.style.transform='scale(1.05)'" onmouseleave="this.style.transform='scale(1)'">
+          <img src="cinemas-logo.png" alt="Cinemas del Country" style="height:56px;width:auto;object-fit:contain" />
         </a>
 
         <div style="position:absolute;right:0;display:flex;align-items:center;gap:12px">
@@ -612,7 +611,7 @@
           <h2 class="cdc-disp" style="margin:8px 0 0;font-size:60px;letter-spacing:0px;color:#fff">Precios</h2>
           <div style="width:64px;height:4px;background:var(--primary);margin-top:12px;border-radius:2px"></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div class="cdc-precios-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
           <sc-for list="{{ ticketPrices }}" as="tp" hint-placeholder-count="2">
             <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);padding:32px">
               <div class="cdc-disp" style="font-size:28px;letter-spacing:1px;color:var(--primary)">{{ tp.format }}</div>
@@ -655,7 +654,7 @@
           <h2 class="cdc-disp" style="margin:8px 0 0;font-size:60px;letter-spacing:0px;color:#fff">Ubicación</h2>
           <div style="width:64px;height:4px;background:var(--primary);margin-top:12px;border-radius:2px"></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:start">
+        <div class="cdc-ubicacion-grid" style="display:grid;grid-template-columns:1fr 1.3fr;gap:32px;align-items:start">
           <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);padding:32px">
             <div class="cdc-disp" style="font-size:30px;letter-spacing:0px;color:#fff">CineMAS del Country</div>
             <p style="margin-top:16px;font-size:15px;line-height:1.7;color:var(--gray)">Av. Felipe Sevilla del Río 201, Int. 64<br>Colima, Col.<br>Tel: (312) 312 01 73</p>
@@ -672,12 +671,8 @@
     <footer id="contacto" style="border-top:1px solid var(--border);background:oklch(0.05 0 0)">
       <div class="cdc-footer-grid" style="max-width:1180px;margin:0 auto;display:grid;gap:48px;grid-template-columns:1.4fr 1fr 1fr 1fr;padding:72px 40px">
         <div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <img src="cinemas-logo.png" alt="Cinemas del Country" style="width:46px;height:46px;object-fit:contain" />
-            <div style="line-height:1">
-              <div class="cdc-disp" style="font-size:24px;letter-spacing:1.5px;color:#fff">cine<span style="color:var(--primary)">mas</span></div>
-              <div style="margin-top:3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:4px;color:var(--gray)">del country</div>
-            </div>
+          <div style="display:flex;align-items:center">
+            <img src="cinemas-logo.png" alt="Cinemas del Country" style="height:42px;width:auto;object-fit:contain" />
           </div>
           <p style="margin-top:16px;max-width:20rem;font-size:14px;color:var(--gray);line-height:1.6">La mejor experiencia de cine. Estrenos, salas premium y promociones todo el año.</p>
           <div style="margin-top:16px;display:flex;gap:8px">
