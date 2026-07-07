@@ -814,7 +814,7 @@
         </div>
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#fff;margin-bottom:10px"><span style="color:var(--gray)">Asientos</span><span style="font-weight:700">{{ seatListLabel }}</span></div>
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#fff;margin-bottom:10px"><span style="color:var(--gray)">{{ seatCountLabel }}</span><span>{{ subtotalLabel }}</span></div>
-        <sc-if value="{{ promo2x1 }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ hasDiscount }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--primary);margin-bottom:10px"><span>Descuento 2x1</span><span>{{ discountLabel }}</span></div>
         </sc-if>
         <sc-if value="{{ selectedCombo }}" hint-placeholder-val="{{ false }}">
@@ -1438,7 +1438,8 @@ class Component extends DCLogic {
     const sorted = [...this.state.seats].sort();
     const { subtotal, discount, fee, comboPrice, grand } = this.calc();
     const hasSeats = this.state.seats.length > 0;
-    const promo2x1 = this.state.promo2x1 && discount > 0;
+    const promo2x1 = this.state.promo2x1;
+    const hasDiscount = discount > 0;
     const selectedCombo = this.state.selectedCombo;
 
     const qrCells = [];
@@ -1542,7 +1543,7 @@ class Component extends DCLogic {
       discountLabel: '−' + this.mxn(discount),
       feeLabel: this.mxn(fee),
       grandTotalLabel: this.mxn(grand),
-      promo2x1,
+      promo2x1, hasDiscount,
       selectedCombo, comboLabel: selectedCombo ? `Combo taquilla ${selectedCombo.num}` : '',
       comboPriceLabel: this.mxn(comboPrice),
       removeCombo: this.removeCombo,
