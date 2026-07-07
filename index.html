@@ -332,6 +332,8 @@
 
   /* ── image-slot: never block touch / pointer ── */
   image-slot{ touch-action:pan-y; pointer-events:none !important; }
+  image-slot::part(ring){ display:none !important; border:none !important; }
+  image-slot::part(empty){ display:none !important; }
 
   /* ── Calendar dropdown ── */
   .cdc-cal-dropdown{
@@ -598,6 +600,7 @@
                 <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:4px;color:var(--primary)">Combo taquilla {{ sc.num }}</span>
                 <div class="cdc-disp" style="margin-top:12px;font-size:58px;letter-spacing:0px;color:var(--primary)">{{ sc.priceLabel }}</div>
                 <p style="margin-top:16px;font-size:14px;line-height:1.65;color:var(--gray)">{{ sc.desc }}</p>
+                <button onClick="{{ sc.onBuy }}" class="cdc-btn-primary" style="margin-top:20px;width:100%;padding:11px 16px;font-size:12px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>Agregar a mi compra</button>
               </div>
             </div>
           </sc-for>
@@ -640,7 +643,7 @@
               <p style="margin:16px 0 0;max-width:32rem;font-size:16px;color:color-mix(in oklab,#fff 80%,transparent)">Disfruta el mejor cine acompañado. Válido en salas 2D presentando tu credencial Cinemas del Country Club.</p>
             </div>
             <div class="cdc-promo-btns" style="display:flex;flex-direction:column;gap:12px;align-items:flex-end">
-              <button onClick="{{ buyFeatured }}" class="cdc-btn-primary" style="padding:15px 30px;font-size:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>Aprovechar promo</button>
+              <button onClick="{{ buyPromo2x1 }}" class="cdc-btn-primary" style="padding:15px 30px;font-size:14px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>Aprovechar promo</button>
               <span style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--gray)">Aplican términos y condiciones</span>
             </div>
           </div>
@@ -703,6 +706,9 @@
     <div style="text-align:center;margin-bottom:30px">
       <sc-if value="{{ isPreorder }}" hint-placeholder-val="{{ false }}">
         <div style="display:inline-flex;align-items:center;gap:8px;border-radius:30px;background:var(--gradRed);padding:5px 14px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:12px;box-shadow:var(--shadowRed)">★ Preventa de estreno</div>
+      </sc-if>
+      <sc-if value="{{ promo2x1 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:inline-flex;align-items:center;gap:8px;border-radius:30px;background:var(--gradRed);padding:5px 14px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:12px;box-shadow:var(--shadowRed)">🎟 Promo 2x1 aplicada</div>
       </sc-if>
       <div class="cdc-disp" style="font-size:40px;letter-spacing:1px;color:#fff;line-height:1">{{ sel.title }}</div>
       <div style="margin-top:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--gray)">{{ sel.format }} · Sala {{ sel.sala }} · {{ dateShort }} {{ showtime }}</div>
@@ -808,6 +814,15 @@
         </div>
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#fff;margin-bottom:10px"><span style="color:var(--gray)">Asientos</span><span style="font-weight:700">{{ seatListLabel }}</span></div>
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#fff;margin-bottom:10px"><span style="color:var(--gray)">{{ seatCountLabel }}</span><span>{{ subtotalLabel }}</span></div>
+        <sc-if value="{{ promo2x1 }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--primary);margin-bottom:10px"><span>Descuento 2x1</span><span>{{ discountLabel }}</span></div>
+        </sc-if>
+        <sc-if value="{{ selectedCombo }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#fff;margin-bottom:10px">
+            <span style="color:var(--gray)">{{ comboLabel }} <button onClick="{{ removeCombo }}" style="border:none;background:transparent;color:var(--gray);text-decoration:underline;cursor:pointer;font-size:11px;padding:0;margin-left:6px">quitar</button></span>
+            <span>{{ comboPriceLabel }}</span>
+          </div>
+        </sc-if>
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#fff;margin-bottom:16px"><span style="color:var(--gray)">Servicio</span><span>{{ feeLabel }}</span></div>
         <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:16px;border-top:1px solid var(--border);margin-bottom:22px">
           <span class="cdc-disp" style="font-size:20px;letter-spacing:1px;color:#fff">TOTAL</span>
@@ -1075,6 +1090,8 @@ class Component extends DCLogic {
     seats: [],
     trailerOpen: false,
     source: 'movies',
+    promo2x1: false,
+    selectedCombo: null,
     form: { name: '', email: '', card: '', expiry: '', cvv: '' },
     formError: '',
     payProcessing: false,
@@ -1127,22 +1144,32 @@ class Component extends DCLogic {
   }
 
   calc() {
-    const subtotal = this.state.seats.reduce((s,id)=>s+this.priceFor(id),0);
+    const sorted = [...this.state.seats].sort();
+    let subtotal = 0, discount = 0;
+    sorted.forEach((id, i) => {
+      const price = this.priceFor(id);
+      subtotal += price;
+      if (this.state.promo2x1 && i % 2 === 1) discount += price;
+    });
     const fee = this.state.seats.length ? 18 : 0;
-    return { subtotal, fee, grand: subtotal+fee };
+    const comboPrice = this.state.selectedCombo ? this.state.selectedCombo.price : 0;
+    return { subtotal, discount, fee, comboPrice, grand: subtotal - discount + fee + comboPrice };
   }
   selNow() {
     const list = this.state.source==='upcoming' ? this.upcomingData() : this.movieData();
     return list[this.state.movieIndex] || this.movieData()[0];
   }
 
-  goHome = () => { this.setState({ screen:'home', activeNav:'Home' }); window.scrollTo(0,0); };
+  goHome = () => { this.setState({ screen:'home', activeNav:'Home', promo2x1:false, selectedCombo:null }); window.scrollTo(0,0); };
   openSearch = () => this.setState({ searchOpen:true, searchQuery:'' });
   closeSearch = () => this.setState({ searchOpen:false });
   onSearchQuery = (e) => this.setState({ searchQuery: e.target.value });
   openSeats = (idx, time) => { this.setState({ screen:'seats', source:'movies', movieIndex:idx, showtime:time, seats:[] }); window.scrollTo(0,0); };
   openPreorder = (idx) => { this.setState({ screen:'seats', source:'upcoming', movieIndex:idx, showtime:this.upcomingData()[idx].premiereTime || '20:00', seats:[] }); window.scrollTo(0,0); };
   buyFeatured = () => this.openSeats(0, this.movieData()[0].schedule[0]);
+  buyPromo2x1 = () => { this.setState({ promo2x1:true }); this.buyFeatured(); };
+  addCombo = (combo) => { this.setState({ selectedCombo: combo }); this.buyFeatured(); };
+  removeCombo = () => this.setState({ selectedCombo: null });
   goPayouts = () => { this.setState({ screen: this.state.ownerAuth ? 'payouts' : 'login', pin:'', pinError:false }); window.scrollTo(0,0); };
   lockOwner = () => { this.setState({ ownerAuth:false, screen:'home' }); window.scrollTo(0,0); };
   pressPin = (d) => {
@@ -1202,7 +1229,7 @@ class Component extends DCLogic {
     this.setState({ payProcessing:true, formError:'' });
     setTimeout(() => {
       this.setState(s => ({
-        payProcessing:false, screen:'confirm', lastCode:code,
+        payProcessing:false, screen:'confirm', lastCode:code, promo2x1:false, selectedCombo:null,
         deposits: s.bankConnected
           ? [{ movie:title, amount, net, method:mLabel, date:'Hoy', time:'justo ahora', code, status:'Depositado' }, ...s.deposits]
           : s.deposits,
@@ -1215,7 +1242,24 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this._heroTimer = setInterval(() => this._heroTick(), 3500);
+    window.addEventListener('scroll', this._onScroll, { passive:true });
   }
+  _onScroll = () => {
+    if (this.state.screen !== 'home') return;
+    const sections = [
+      { label:'Cartelera', id:'cartelera' },
+      { label:'Próximamente', id:'proximamente' },
+      { label:'Promociones', id:'promociones' },
+      { label:'Contacto', id:'contacto' },
+    ];
+    const offset = 140;
+    let current = 'Home';
+    for (const s of sections) {
+      const el = document.getElementById(s.id);
+      if (el && el.getBoundingClientRect().top - offset <= 0) current = s.label;
+    }
+    if (current !== this.state.activeNav) this.setState({ activeNav: current });
+  };
   componentDidUpdate() {
     const el = document.getElementById('cdc-hero-slider');
     if (el && !el._cdcListened) {
@@ -1235,6 +1279,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     clearInterval(this._heroTimer);
     clearTimeout(this._pauseResume);
+    window.removeEventListener('scroll', this._onScroll);
   }
   _heroTick() {
     if (this._userPaused) return;
@@ -1391,10 +1436,10 @@ class Component extends DCLogic {
     });
 
     const sorted = [...this.state.seats].sort();
-    const subtotal = this.state.seats.reduce((s, id) => s + this.priceFor(id), 0);
-    const fee = this.state.seats.length ? 18 : 0;
-    const grand = subtotal + fee;
+    const { subtotal, discount, fee, comboPrice, grand } = this.calc();
     const hasSeats = this.state.seats.length > 0;
+    const promo2x1 = this.state.promo2x1 && discount > 0;
+    const selectedCombo = this.state.selectedCombo;
 
     const qrCells = [];
     for (let i = 0; i < 49; i++) {
@@ -1466,9 +1511,9 @@ class Component extends DCLogic {
         { name:'VIP', tag:'Premium', desc:'Salas exclusivas con butacas reclinables y servicio en sala.' },
       ],
       snackCombos: [
-        { num:'7', priceLabel:this.mxn(139), desc:'1 Palomitas mediana + Refresco mediano' },
-        { num:'8', priceLabel:this.mxn(158), desc:'1 Palomitas mediana + ICEE chico' },
-        { num:'9', priceLabel:this.mxn(168), desc:'1 Palomitas jumbo + Refresco grande' },
+        { num:'7', price:139, priceLabel:this.mxn(139), desc:'1 Palomitas mediana + Refresco mediano', onBuy:()=>this.addCombo({ num:'7', price:139, desc:'1 Palomitas mediana + Refresco mediano' }) },
+        { num:'8', price:158, priceLabel:this.mxn(158), desc:'1 Palomitas mediana + ICEE chico', onBuy:()=>this.addCombo({ num:'8', price:158, desc:'1 Palomitas mediana + ICEE chico' }) },
+        { num:'9', price:168, priceLabel:this.mxn(168), desc:'1 Palomitas jumbo + Refresco grande', onBuy:()=>this.addCombo({ num:'9', price:168, desc:'1 Palomitas jumbo + Refresco grande' }) },
       ],
       ticketPrices: [
         { format:'PRECIOS 2D', rows:[
@@ -1492,10 +1537,15 @@ class Component extends DCLogic {
       seatRows,
       seatCountLabel: hasSeats ? `${this.state.seats.length} ${this.state.seats.length===1?'entrada':'entradas'}` : 'Sin asientos',
       seatListLabel: hasSeats ? sorted.join(', ') : 'Elige tus butacas',
-      totalLabel: this.mxn(subtotal),
+      totalLabel: this.mxn(subtotal - discount),
       subtotalLabel: this.mxn(subtotal),
+      discountLabel: '−' + this.mxn(discount),
       feeLabel: this.mxn(fee),
       grandTotalLabel: this.mxn(grand),
+      promo2x1,
+      selectedCombo, comboLabel: selectedCombo ? `Combo taquilla ${selectedCombo.num}` : '',
+      comboPriceLabel: this.mxn(comboPrice),
+      removeCombo: this.removeCombo,
       continueStyle: `border:none;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;padding:13px 30px;border-radius:30px;color:#fff;${hasSeats ? 'background:var(--gradRed);cursor:pointer;box-shadow:var(--shadowRed)' : 'background:var(--border);cursor:not-allowed;opacity:.6'}`,
       qrCells, lastCode: this.state.lastCode,
 
