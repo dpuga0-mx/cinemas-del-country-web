@@ -1663,6 +1663,7 @@ class Component extends DCLogic {
 
       sel, showtime: this.state.showtime,
       seatRows, salaOptions, seatTypeRows,
+      hasSeats,
       seatCountLabel: hasSeats ? `${this.state.seats.length} ${this.state.seats.length===1?'entrada':'entradas'}` : 'Sin asientos',
       seatListLabel: hasSeats ? sorted.join(', ') : 'Elige tus butacas',
       totalLabel: this.mxn(subtotal - discount),
