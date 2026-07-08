@@ -1547,18 +1547,30 @@ class Component extends DCLogic {
   onSearchQuery = (e) => this.setState({ searchQuery: e.target.value });
   openMoviePicker = () => this.setState({ moviePickerOpen:true });
   closeMoviePicker = () => this.setState({ moviePickerOpen:false });
-  openSeats = (idx, time) => { this.setState({ screen:'seats', source:'movies', movieIndex:idx, showtime:time, seats:[], selectedFormat:'2D', formatWarning:'', moviePickerOpen:false }, this._pushHistory); window.scrollTo(0,0); };
-  openPreorder = (idx) => { this.setState({ screen:'seats', source:'upcoming', movieIndex:idx, showtime:this.upcomingData()[idx].premiereTime || '20:00', seats:[], selectedFormat:'2D', formatWarning:'' }, this._pushHistory); window.scrollTo(0,0); };
+  openSeats = (idx, time) => { const movie = this.movieData()[idx]; this.setState({ screen:'seats', source:'movies', movieIndex:idx, showtime:time, seats:[], selectedFormat:this._defaultFormatFor(movie), formatWarning:'', moviePickerOpen:false }, this._pushHistory); window.scrollTo(0,0); };
+  openPreorder = (idx) => { const movie = this.upcomingData()[idx]; this.setState({ screen:'seats', source:'upcoming', movieIndex:idx, showtime:movie.premiereTime || '20:00', seats:[], selectedFormat:this._defaultFormatFor(movie), formatWarning:'' }, this._pushHistory); window.scrollTo(0,0); };
   _movieSupports3D(movie) {
     if (!movie) return false;
     if (movie.formatSupport) return movie.formatSupport === '3D' || movie.formatSupport === 'Ambos';
     return !!(movie.format && movie.format.includes('3D'));
   }
-  selectFormat = (fmt) => {
+  _movieSupports2D(movie) {
+    if (!movie) return true;
+    if (movie.formatSupport) return movie.formatSupport === '2D' || movie.formatSupport === 'Ambos';
+    return !(movie.format && movie.format.includes('3D') && !movie.format.includes('2D'));
+  }
+  _defaultFormatFor(movie) {
+    return (movie && movie.formatSupport === '3D') ? '3D' : '2D';
+  }
+  _currentMovieForFormat() {
     const list = this.state.source === 'upcoming' ? this.upcomingData() : this.movieData();
-    const movie = list[this.state.movieIndex] || list[0];
-    if (fmt === '3D' && !this._movieSupports3D(movie)) {
-      this.setState({ formatWarning: 'Esta película no está disponible en 3D.' });
+    return list[this.state.movieIndex] || list[0];
+  }
+  selectFormat = (fmt) => {
+    const movie = this._currentMovieForFormat();
+    const supported = fmt === '3D' ? this._movieSupports3D(movie) : this._movieSupports2D(movie);
+    if (!supported) {
+      this.setState({ formatWarning: `Esta película no está disponible en ${fmt}.` });
       return;
     }
     this.setState({ selectedFormat: fmt, formatWarning: '' }, this._replaceHistory);
