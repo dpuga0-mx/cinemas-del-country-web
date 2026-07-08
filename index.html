@@ -375,7 +375,7 @@
         <div style="position:absolute;right:0;display:flex;align-items:center;gap:12px">
           <button class="cdc-header-settings cdc-icon-btn" onClick="{{ goPayouts }}" aria-label="Panel del cine" style="background:transparent;cursor:pointer;border:1px solid var(--border);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></button>
           <button onClick="{{ openSearch }}" aria-label="Buscar" class="cdc-icon-btn" style="background:transparent;cursor:pointer;border:1px solid var(--border);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
-          <button onClick="{{ buyFeatured }}" class="cdc-header-buy cdc-btn-primary" style="padding:10px 18px;font-size:11px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>Comprar</button>
+          <button onClick="{{ openMoviePicker }}" class="cdc-header-buy cdc-btn-primary" style="padding:10px 18px;font-size:11px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 11v2"/><path d="M13 17v2"/></svg>Comprar</button>
         </div>
       </div>
 
@@ -714,17 +714,20 @@
         <div style="display:inline-flex;align-items:center;gap:8px;border-radius:30px;background:var(--gradRed);padding:5px 14px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:12px;box-shadow:var(--shadowRed)">🎟 Promo 2x1 aplicada</div>
       </sc-if>
       <div class="cdc-disp" style="font-size:40px;letter-spacing:1px;color:#fff;line-height:1">{{ sel.title }}</div>
-      <div style="margin-top:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--gray)">{{ sel.format }} · Sala {{ sel.sala }} · {{ dateShort }} {{ showtime }}</div>
+      <div style="margin-top:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--gray)">{{ formatLabel }} · Sala {{ sel.sala }} · {{ dateShort }} {{ showtime }}</div>
     </div>
 
     <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:28px;margin-bottom:28px">
       <div>
-        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--gray);margin-bottom:10px;text-align:center">Elige tu sala</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;max-width:320px">
-          <sc-for list="{{ salaOptions }}" as="sa" hint-placeholder-count="10">
-            <button onClick="{{ sa.onClick }}" style="{{ sa.style }}">{{ sa.n }}</button>
+        <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--gray);margin-bottom:10px;text-align:center">Elige el formato</div>
+        <div style="display:flex;gap:8px">
+          <sc-for list="{{ formatOptions }}" as="fo" hint-placeholder-count="2">
+            <button onClick="{{ fo.onClick }}" style="{{ fo.style }}">{{ fo.label }}</button>
           </sc-for>
         </div>
+        <sc-if value="{{ formatWarning }}">
+          <div style="margin-top:10px;max-width:220px;font-size:11px;color:#ffaaaa;text-align:center">{{ formatWarning }}</div>
+        </sc-if>
       </div>
       <div style="position:relative">
         <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:var(--gray);margin-bottom:10px;text-align:center">Elige el día</div>
@@ -1057,6 +1060,14 @@
                 </sc-for>
               </div>
             </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Disponibilidad de formato</label>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                <sc-for list="{{ movieFormFormatOptions }}" as="fo" hint-placeholder-count="3">
+                  <button onClick="{{ fo.onClick }}" style="{{ fo.style }}">{{ fo.label }}</button>
+                </sc-for>
+              </div>
+            </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
               <div>
                 <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Calificación (0-10)</label>
@@ -1335,6 +1346,45 @@
   </div>
   </sc-if>
 
+  <!-- ================= MOVIE PICKER MODAL ================= -->
+  <sc-if value="{{ moviePickerOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:96">
+    <div onClick="{{ closeMoviePicker }}" style="position:absolute;inset:0;background:oklch(0 0 0 / .85);backdrop-filter:blur(8px)"></div>
+    <div style="position:relative;height:100%;overflow-y:auto;padding:60px 24px 40px">
+      <div style="max-width:1100px;margin:0 auto">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px">
+          <div>
+            <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:3px;color:var(--primary)">Elige tu película</div>
+            <h2 class="cdc-disp" style="margin:6px 0 0;font-size:36px;color:#fff">¿Qué quieres ver?</h2>
+          </div>
+          <button onClick="{{ closeMoviePicker }}" style="background:transparent;border:1px solid var(--border);border-radius:30px;cursor:pointer;color:#fff;font-size:13px;padding:8px 18px;flex-shrink:0">Cerrar ✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px">
+          <sc-for list="{{ movies }}" as="m" hint-placeholder-count="7">
+            <div style="border-radius:16px;overflow:hidden;background:var(--card);outline:1px solid var(--border)">
+              <div style="position:relative;aspect-ratio:2/3;overflow:hidden">
+                <image-slot id="{{ m.slotId }}-pick" fit="cover" src="{{ m.poster }}" placeholder="{{ m.posterHint }}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></image-slot>
+                <div class="cdc-poster-grad"></div>
+                <div style="position:absolute;left:10px;top:10px;z-index:2;display:flex;align-items:center;gap:4px;border-radius:30px;background:oklch(0.07 0 0 / .8);padding:3px 8px;font-size:10px;font-weight:800;color:#fff">🍅 {{ m.scorePct }}%</div>
+                <div style="position:absolute;right:10px;top:10px;z-index:2;border:1px solid color-mix(in oklab,#fff 40%,transparent);border-radius:4px;background:oklch(0.07 0 0 / .7);padding:2px 6px;font-size:9px;font-weight:800;color:#fff">{{ m.rating }}</div>
+              </div>
+              <div style="padding:14px">
+                <h3 class="cdc-disp" style="margin:0;font-size:20px;color:#fff">{{ m.title }}</h3>
+                <p style="margin:3px 0 0;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--gray)">{{ m.genre }} · {{ m.duration }}</p>
+                <div style="margin-top:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px">
+                  <sc-for list="{{ m.schedule }}" as="t" hint-placeholder-count="4">
+                    <button onClick="{{ t.onClick }}" class="cdc-schedule-btn" style="font-size:11px;padding:6px">{{ t.time }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
   <!-- ================= TRAILER MODAL ================= -->
   <sc-if value="{{ trailerOpen }}" hint-placeholder-val="{{ false }}">
   <div onClick="{{ closeTrailer }}" style="position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:32px;background:oklch(0 0 0 / .85);backdrop-filter:blur(8px)">
@@ -1375,7 +1425,9 @@ class Component extends DCLogic {
     promo2x1: false,
     selectedCombo: null,
     seatTypes: {},
-    selectedSala: null,
+    selectedFormat: '2D',
+    formatWarning: '',
+    moviePickerOpen: false,
     payoutsTab: 'cartelera',
     movieForm: null,
     movieFormEditIdx: null,
@@ -1427,13 +1479,13 @@ class Component extends DCLogic {
   }
   _defaultMovieData() {
     return [
-      { title:'Toy Story 5', genre:'Animación', duration:'1h 42m', rating:'AA', score:'9.0', sala:'1', formats:['ESP 2D','ESP 3D'], poster:'posters/toystory.png', schedule:['12:15','1:15','2:15','3:15','4:30','5:30','6:30','7:30','8:30','9:15'], synopsis:'Woody, Buzz y los amigos de Andy se enfrentan a nuevos cambios y aventuras que pondrán a prueba su amistad.' },
-      { title:'Leviticus: Ritual de Sangre', genre:'Terror', duration:'1h 28m', rating:'B15', score:'7.4', sala:'5', formats:['ESP'], poster:'posters/leviticus.png', schedule:['6:00','7:40','9:20'], synopsis:'Un antiguo ritual convoca fuerzas oscuras que amenazan con consumir todo a su paso.' },
-      { title:'Disclosure Day', genre:'Ciencia Ficción', duration:'2h 26m', rating:'B', score:'8.1', sala:'2', formats:['ESP','SUB'], poster:'posters/disclosure.png', schedule:['12:30','3:10','6:00','8:40'], synopsis:'Un exanalista de la CIA revela documentos clasificados que cambian para siempre la historia de la humanidad.' },
-      { title:'Letras Robadas', genre:'Comedia', duration:'1h 37m', rating:'B15', score:'7.8', sala:'6', formats:['ESP'], poster:'posters/letras.png', schedule:['4:00'], synopsis:'Una comedia caótica sobre dos aspirantes a escritores cuya rivalidad se convierte en una aventura imprevista.' },
-      { title:'Amos del Universo', genre:'Fantasía', duration:'2h 21m', rating:'TBC', score:'8.3', sala:'3', formats:['ESP'], poster:'posters/amos.png', schedule:['3:20'], synopsis:'He-Man regresa al mundo real para detener al malvado Skeletor antes de que domine el universo entero.' },
-      { title:'Scary Movie 6', genre:'Comedia', duration:'1h 37m', rating:'B15', score:'6.9', sala:'4', formats:['ESP','SUB'], poster:'posters/scary.png', schedule:['1:15','3:15','5:15','7:15','9:15'], synopsis:'El regreso de la parodia más irreverente con nuevas víctimas, más absurdos y risas garantizadas.' },
-      { title:'Backrooms: Sin Salida', genre:'Suspenso', duration:'1h 50m', rating:'TBC', score:'7.2', sala:'7', formats:['ESP'], poster:'posters/backrooms.png', schedule:['6:00','8:00'], synopsis:'Un grupo de exploradores queda atrapado en infinitas habitaciones amarillas donde la realidad no existe.' },
+      { title:'Toy Story 5', genre:'Animación', duration:'1h 42m', rating:'AA', score:'9.0', sala:'1', formats:['ESP 2D','ESP 3D'], formatSupport:'Ambos', poster:'posters/toystory.png', schedule:['12:15','1:15','2:15','3:15','4:30','5:30','6:30','7:30','8:30','9:15'], synopsis:'Woody, Buzz y los amigos de Andy se enfrentan a nuevos cambios y aventuras que pondrán a prueba su amistad.' },
+      { title:'Leviticus: Ritual de Sangre', genre:'Terror', duration:'1h 28m', rating:'B15', score:'7.4', sala:'5', formats:['ESP'], formatSupport:'2D', poster:'posters/leviticus.png', schedule:['6:00','7:40','9:20'], synopsis:'Un antiguo ritual convoca fuerzas oscuras que amenazan con consumir todo a su paso.' },
+      { title:'Disclosure Day', genre:'Ciencia Ficción', duration:'2h 26m', rating:'B', score:'8.1', sala:'2', formats:['ESP','SUB'], formatSupport:'2D', poster:'posters/disclosure.png', schedule:['12:30','3:10','6:00','8:40'], synopsis:'Un exanalista de la CIA revela documentos clasificados que cambian para siempre la historia de la humanidad.' },
+      { title:'Letras Robadas', genre:'Comedia', duration:'1h 37m', rating:'B15', score:'7.8', sala:'6', formats:['ESP'], formatSupport:'2D', poster:'posters/letras.png', schedule:['4:00'], synopsis:'Una comedia caótica sobre dos aspirantes a escritores cuya rivalidad se convierte en una aventura imprevista.' },
+      { title:'Amos del Universo', genre:'Fantasía', duration:'2h 21m', rating:'TBC', score:'8.3', sala:'3', formats:['ESP'], formatSupport:'2D', poster:'posters/amos.png', schedule:['3:20'], synopsis:'He-Man regresa al mundo real para detener al malvado Skeletor antes de que domine el universo entero.' },
+      { title:'Scary Movie 6', genre:'Comedia', duration:'1h 37m', rating:'B15', score:'6.9', sala:'4', formats:['ESP','SUB'], formatSupport:'2D', poster:'posters/scary.png', schedule:['1:15','3:15','5:15','7:15','9:15'], synopsis:'El regreso de la parodia más irreverente con nuevas víctimas, más absurdos y risas garantizadas.' },
+      { title:'Backrooms: Sin Salida', genre:'Suspenso', duration:'1h 50m', rating:'TBC', score:'7.2', sala:'7', formats:['ESP'], formatSupport:'2D', poster:'posters/backrooms.png', schedule:['6:00','8:00'], synopsis:'Un grupo de exploradores queda atrapado en infinitas habitaciones amarillas donde la realidad no existe.' },
     ];
   }
 
@@ -1489,12 +1541,28 @@ class Component extends DCLogic {
     return list[this.state.movieIndex] || this.movieData()[0];
   }
 
-  goHome = () => { this.setState({ screen:'home', activeNav:'Home', promo2x1:false, selectedCombo:null, seatTypes:{}, selectedSala:null }, this._pushHistory); window.scrollTo(0,0); };
+  goHome = () => { this.setState({ screen:'home', activeNav:'Home', promo2x1:false, selectedCombo:null, seatTypes:{}, selectedFormat:'2D', formatWarning:'' }, this._pushHistory); window.scrollTo(0,0); };
   openSearch = () => this.setState({ searchOpen:true, searchQuery:'' });
   closeSearch = () => this.setState({ searchOpen:false });
   onSearchQuery = (e) => this.setState({ searchQuery: e.target.value });
-  openSeats = (idx, time) => { this.setState({ screen:'seats', source:'movies', movieIndex:idx, showtime:time, seats:[] }, this._pushHistory); window.scrollTo(0,0); };
-  openPreorder = (idx) => { this.setState({ screen:'seats', source:'upcoming', movieIndex:idx, showtime:this.upcomingData()[idx].premiereTime || '20:00', seats:[] }, this._pushHistory); window.scrollTo(0,0); };
+  openMoviePicker = () => this.setState({ moviePickerOpen:true });
+  closeMoviePicker = () => this.setState({ moviePickerOpen:false });
+  openSeats = (idx, time) => { this.setState({ screen:'seats', source:'movies', movieIndex:idx, showtime:time, seats:[], selectedFormat:'2D', formatWarning:'', moviePickerOpen:false }, this._pushHistory); window.scrollTo(0,0); };
+  openPreorder = (idx) => { this.setState({ screen:'seats', source:'upcoming', movieIndex:idx, showtime:this.upcomingData()[idx].premiereTime || '20:00', seats:[], selectedFormat:'2D', formatWarning:'' }, this._pushHistory); window.scrollTo(0,0); };
+  _movieSupports3D(movie) {
+    if (!movie) return false;
+    if (movie.formatSupport) return movie.formatSupport === '3D' || movie.formatSupport === 'Ambos';
+    return !!(movie.format && movie.format.includes('3D'));
+  }
+  selectFormat = (fmt) => {
+    const list = this.state.source === 'upcoming' ? this.upcomingData() : this.movieData();
+    const movie = list[this.state.movieIndex] || list[0];
+    if (fmt === '3D' && !this._movieSupports3D(movie)) {
+      this.setState({ formatWarning: 'Esta película no está disponible en 3D.' });
+      return;
+    }
+    this.setState({ selectedFormat: fmt, formatWarning: '' }, this._replaceHistory);
+  };
   buyFeatured = () => this.openSeats(0, this.movieData()[0].schedule[0]);
   buyPromo2x1 = () => { this.setState({ promo2x1:true }); this.buyFeatured(); };
   addCombo = (combo) => { this.setState({ selectedCombo: combo }); this.buyFeatured(); };
@@ -1503,7 +1571,7 @@ class Component extends DCLogic {
   lockOwner = () => { this.setState({ ownerAuth:false, screen:'home' }, this._pushHistory); window.scrollTo(0,0); };
   setPayoutsTab = (tab) => this.setState({ payoutsTab: tab });
   openAddMovie = () => this.setState({
-    movieForm: { title:'', genre:'', duration:'', rating:'AA', score:'', sala:'', formats:'', schedule:'', synopsis:'', poster:'' },
+    movieForm: { title:'', genre:'', duration:'', rating:'AA', score:'', sala:'', formats:'', schedule:'', synopsis:'', poster:'', formatSupport:'2D' },
     movieFormEditIdx: null, movieFormError:'',
   });
   openEditMovie = (idx) => {
@@ -1512,7 +1580,7 @@ class Component extends DCLogic {
       movieForm: {
         title: m.title||'', genre: m.genre||'', duration: m.duration||'', rating: m.rating||'AA', score: m.score||'',
         sala: m.sala||'', formats: (m.formats||[]).join(', '), schedule: (m.schedule||[]).join(', '),
-        synopsis: m.synopsis||'', poster: m.poster||'',
+        synopsis: m.synopsis||'', poster: m.poster||'', formatSupport: m.formatSupport||'2D',
       },
       movieFormEditIdx: idx, movieFormError:'',
     });
@@ -1531,7 +1599,7 @@ class Component extends DCLogic {
       rating: f.rating, score: f.score.trim(), sala: f.sala.trim(),
       formats: f.formats.split(',').map(s=>s.trim()).filter(Boolean),
       schedule: f.schedule.split(',').map(s=>s.trim()).filter(Boolean),
-      synopsis: f.synopsis.trim(), poster: f.poster.trim(),
+      synopsis: f.synopsis.trim(), poster: f.poster.trim(), formatSupport: f.formatSupport || '2D',
     };
     if (this.state.movieFormEditIdx !== null) movies[this.state.movieFormEditIdx] = newMovie;
     else movies.push(newMovie);
@@ -1643,7 +1711,6 @@ class Component extends DCLogic {
     return { seats: [...s.seats, id], seatTypes: { ...s.seatTypes, [id]: 'general' } };
   }, this._replaceHistory);
   setSeatType = (id, type) => this.setState(s => ({ seatTypes: { ...s.seatTypes, [id]: type } }), this._replaceHistory);
-  selectSala = (n) => this.setState({ selectedSala: n }, this._replaceHistory);
   setForm = (field, val) => this.setState(s => ({ form: { ...s.form, [field]: val }, formError: '' }));
   goCheckout = () => { if (this.state.seats.length) { this.setState({ screen:'checkout', formError: '' }, this._pushHistory); window.scrollTo(0,0); } };
   backToSeats = () => { this.setState({ screen:'seats' }, this._pushHistory); window.scrollTo(0,0); };
@@ -1746,7 +1813,7 @@ class Component extends DCLogic {
     const isPreorder = this.state.source === 'upcoming';
     const selList = isPreorder ? upcoming : movies;
     const selBase = selList[this.state.movieIndex] || movies[0];
-    const sel = { ...selBase, format: selBase.format || (selBase.formats && selBase.formats[0]) || '', sala: this.state.selectedSala || selBase.sala };
+    const sel = { ...selBase, format: selBase.format || (selBase.formats && selBase.formats[0]) || '', sala: selBase.sala };
     const todayDate = new Date();
     const today = { year: todayDate.getFullYear(), month: todayDate.getMonth(), day: todayDate.getDate() };
     const selDate = this.state.selectedDate || today;
@@ -1889,13 +1956,14 @@ class Component extends DCLogic {
     const { subtotal, discount, fee, comboPrice, grand } = this.calc();
     const hasSeats = this.state.seats.length > 0;
 
-    const currentSala = this.state.selectedSala || sel.sala;
-    const salaList = ['1','2','3','4','5','6','7','IMAX','VIP','4DX'];
-    const salaOptions = salaList.map(n => {
-      const active = String(currentSala) === n;
+    const selectedFormat = this.state.selectedFormat;
+    const formatWarning = this.state.formatWarning;
+    const formatLabel = `ESP ${selectedFormat}`;
+    const formatOptions = ['2D','3D'].map(f => {
+      const active = selectedFormat === f;
       return {
-        n, onClick: () => this.selectSala(n),
-        style: `cursor:pointer;border-radius:10px;padding:10px 6px;font-size:12px;font-weight:800;text-align:center;border:1.5px solid ${active?'var(--primary)':'var(--border)'};background:${active?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${active?'#fff':'var(--gray)'}`,
+        label: f, onClick: () => this.selectFormat(f),
+        style: `cursor:pointer;border-radius:10px;padding:12px 28px;font-size:13px;font-weight:800;text-align:center;border:1.5px solid ${active?'var(--primary)':'var(--border)'};background:${active?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${active?'#fff':'var(--gray)'}`,
       };
     });
 
@@ -1966,6 +2034,11 @@ class Component extends DCLogic {
     const movieFormRatingOptions = movieForm ? ratingChoices.map(r => ({
       label: r, onClick: () => this.setMovieFormField('rating', r),
       style: `cursor:pointer;border-radius:8px;padding:8px 4px;font-size:11px;font-weight:800;border:1.5px solid ${movieForm.rating===r?'var(--primary)':'var(--border)'};background:${movieForm.rating===r?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${movieForm.rating===r?'#fff':'var(--gray)'}`,
+    })) : [];
+    const formatSupportChoices = [{ v:'2D', label:'Solo 2D' }, { v:'3D', label:'Solo 3D' }, { v:'Ambos', label:'2D y 3D' }];
+    const movieFormFormatOptions = movieForm ? formatSupportChoices.map(fc => ({
+      label: fc.label, onClick: () => this.setMovieFormField('formatSupport', fc.v),
+      style: `cursor:pointer;border-radius:8px;padding:10px 6px;font-size:11px;font-weight:800;border:1.5px solid ${movieForm.formatSupport===fc.v?'var(--primary)':'var(--border)'};background:${movieForm.formatSupport===fc.v?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${movieForm.formatSupport===fc.v?'#fff':'var(--gray)'}`,
     })) : [];
 
     const upcomingForm = this.state.upcomingForm;
@@ -2070,7 +2143,7 @@ class Component extends DCLogic {
       ],
 
       sel, showtime: this.state.showtime,
-      seatRows, salaOptions, seatTypeRows,
+      seatRows, formatOptions, formatWarning, formatLabel, seatTypeRows,
       hasSeats,
       seatCountLabel: hasSeats ? `${this.state.seats.length} ${this.state.seats.length===1?'entrada':'entradas'}` : 'Sin asientos',
       seatListLabel: hasSeats ? sorted.join(', ') : 'Elige tus butacas',
@@ -2115,7 +2188,7 @@ class Component extends DCLogic {
       ],
       payoutsTabsVm, isPayoutsTabCartelera, isPayoutsTabProximamente, isPayoutsTabPagos,
       movieForm, showMovieForm, showMovieList, movieFormError: this.state.movieFormError,
-      movieFormRatingOptions, adminMoviesVm, adminActionBtn,
+      movieFormRatingOptions, movieFormFormatOptions, adminMoviesVm, adminActionBtn,
       openAddMovie: this.openAddMovie, closeMovieForm: this.closeMovieForm, saveMovieForm: this.saveMovieForm,
       restoreDefaultCartelera: this.restoreDefaultCartelera,
       onMovieTitle: (e) => this.setMovieFormField('title', e.target.value),
@@ -2157,6 +2230,8 @@ class Component extends DCLogic {
       searchOpen: this.state.searchOpen, searchQuery: this.state.searchQuery,
       searchResultsVm, searchEmpty,
       openSearch:this.openSearch, closeSearch:this.closeSearch, onSearchQuery:this.onSearchQuery,
+      moviePickerOpen: this.state.moviePickerOpen,
+      openMoviePicker: this.openMoviePicker, closeMoviePicker: this.closeMoviePicker,
 
       goHome:this.goHome, buyFeatured:this.buyFeatured, buyPromo2x1:this.buyPromo2x1, goCheckout:this.goCheckout,
       backToSeats:this.backToSeats, confirmPurchase:this.confirmPurchase,
