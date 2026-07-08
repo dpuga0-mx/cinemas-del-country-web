@@ -983,13 +983,17 @@
       <h1 class="cdc-disp" style="margin:8px 0 6px;font-size:48px;letter-spacing:1px;color:#fff">Administrar cartelera</h1>
       <p style="margin:0 0 24px;font-size:15px;color:var(--gray);max-width:46rem">Agrega, edita o elimina las películas que se muestran en el sitio.</p>
     </sc-if>
+    <sc-if value="{{ isPayoutsTabProximamente }}" hint-placeholder-val="{{ false }}">
+      <h1 class="cdc-disp" style="margin:8px 0 6px;font-size:48px;letter-spacing:1px;color:#fff">Administrar próximos estrenos</h1>
+      <p style="margin:0 0 24px;font-size:15px;color:var(--gray);max-width:46rem">Agrega, edita o elimina las películas en preventa.</p>
+    </sc-if>
     <sc-if value="{{ isPayoutsTabPagos }}" hint-placeholder-val="{{ false }}">
       <h1 class="cdc-disp" style="margin:8px 0 6px;font-size:48px;letter-spacing:1px;color:#fff">Pagos y transferencias</h1>
       <p style="margin:0 0 24px;font-size:15px;color:var(--gray);max-width:46rem">Conecta la cuenta bancaria del cine para que el dinero de cada venta con tarjeta caiga directo a tu banco.</p>
     </sc-if>
 
     <div style="display:flex;gap:10px;margin-bottom:36px;border-bottom:1px solid var(--border);padding-bottom:20px">
-      <sc-for list="{{ payoutsTabsVm }}" as="pt" hint-placeholder-count="2">
+      <sc-for list="{{ payoutsTabsVm }}" as="pt" hint-placeholder-count="3">
         <button onClick="{{ pt.onClick }}" style="{{ pt.style }}">{{ pt.label }}</button>
       </sc-for>
     </div>
@@ -1086,6 +1090,115 @@
           <div style="display:flex;gap:10px;margin-top:22px">
             <button onClick="{{ saveMovieForm }}" class="cdc-btn-primary" style="padding:12px 24px;font-size:12px;">Guardar</button>
             <button onClick="{{ closeMovieForm }}" style="{{ adminActionBtn }};padding:12px 24px;">Cancelar</button>
+          </div>
+        </div>
+      </sc-if>
+    </sc-if>
+
+    <sc-if value="{{ isPayoutsTabProximamente }}" hint-placeholder-val="{{ false }}">
+      <sc-if value="{{ showUpcomingList }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+          <button onClick="{{ openAddUpcoming }}" class="cdc-btn-primary" style="padding:11px 20px;font-size:12px;">+ Agregar próximo estreno</button>
+        </div>
+        <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);overflow:hidden">
+          <sc-for list="{{ adminUpcomingVm }}" as="au" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+              <div>
+                <div style="font-size:15px;font-weight:800;color:#fff">{{ au.title }}</div>
+                <div style="margin-top:4px;font-size:12px;color:var(--gray)">{{ au.meta }}</div>
+              </div>
+              <sc-if value="{{ au.isConfirmingDelete }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:12px;color:var(--gray)">¿Eliminar este estreno?</span>
+                  <button onClick="{{ au.onConfirmDelete }}" style="cursor:pointer;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;border:none;background:var(--gradRed);color:#fff;box-shadow:var(--shadowRed)">Sí, eliminar</button>
+                  <button onClick="{{ au.onCancelDelete }}" style="{{ adminActionBtn }}">Cancelar</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ au.isNotConfirmingDelete }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <button onClick="{{ au.onEdit }}" style="{{ adminActionBtn }}">Editar</button>
+                  <button onClick="{{ au.onAskDelete }}" style="{{ adminActionBtn }};color:var(--primary);border-color:color-mix(in oklab,var(--primary) 40%,transparent)">Eliminar</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:24px">
+          <button onClick="{{ restoreDefaultUpcoming }}" style="border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);text-decoration:underline">Restaurar próximos estrenos originales</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ showUpcomingForm }}" hint-placeholder-val="{{ false }}">
+        <div style="border-radius:22px;border:1px solid var(--border);background:var(--card);padding:28px;max-width:640px">
+          <div style="font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:#fff;margin-bottom:18px">Datos del próximo estreno</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Título *</label>
+              <input value="{{ upcomingForm.title }}" onChange="{{ onUpcomingTitle }}" placeholder="Título de la película" style="{{ inputStyle }}" />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Género</label>
+                <input value="{{ upcomingForm.genre }}" onChange="{{ onUpcomingGenre }}" placeholder="Acción, Animación…" style="{{ inputStyle }}" />
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Duración</label>
+                <input value="{{ upcomingForm.duration }}" onChange="{{ onUpcomingDuration }}" placeholder="2h 10m" style="{{ inputStyle }}" />
+              </div>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Clasificación</label>
+              <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">
+                <sc-for list="{{ upcomingFormRatingOptions }}" as="rt" hint-placeholder-count="6">
+                  <button onClick="{{ rt.onClick }}" style="{{ rt.style }}">{{ rt.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Sala</label>
+                <input value="{{ upcomingForm.sala }}" onChange="{{ onUpcomingSala }}" placeholder="IMAX" style="{{ inputStyle }}" />
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Formato</label>
+                <input value="{{ upcomingForm.format }}" onChange="{{ onUpcomingFormat }}" placeholder="IMAX 3D" style="{{ inputStyle }}" />
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Fecha de estreno *</label>
+                <input value="{{ upcomingForm.premiere }}" onChange="{{ onUpcomingPremiere }}" placeholder="19 Dic 2026" style="{{ inputStyle }}" />
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Hora del estreno</label>
+                <input value="{{ upcomingForm.premiereTime }}" onChange="{{ onUpcomingPremiereTime }}" placeholder="20:00" style="{{ inputStyle }}" />
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Fecha grande (póster)</label>
+                <input value="{{ upcomingForm.dateBig }}" onChange="{{ onUpcomingDateBig }}" placeholder="19 DIC" style="{{ inputStyle }}" />
+              </div>
+              <div>
+                <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Subtítulo (póster)</label>
+                <input value="{{ upcomingForm.dateSub }}" onChange="{{ onUpcomingDateSub }}" placeholder="Estreno mundial" style="{{ inputStyle }}" />
+              </div>
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Ruta del póster</label>
+              <input value="{{ upcomingForm.poster }}" onChange="{{ onUpcomingPoster }}" placeholder="posters/archivo.png" style="{{ inputStyle }}" />
+            </div>
+            <div>
+              <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gray);margin-bottom:6px">Sinopsis</label>
+              <textarea value="{{ upcomingForm.synopsis }}" onChange="{{ onUpcomingSynopsis }}" placeholder="Sinopsis de la película" style="{{ inputStyle }};min-height:80px;resize:vertical;font-family:inherit"></textarea>
+            </div>
+          </div>
+          <sc-if value="{{ upcomingFormError }}">
+            <div style="margin-top:14px;padding:10px 14px;border-radius:8px;background:oklch(0.60 0.235 25 / 0.12);border:1px solid oklch(0.60 0.235 25 / 0.4);font-size:12px;color:#ffaaaa">{{ upcomingFormError }}</div>
+          </sc-if>
+          <div style="display:flex;gap:10px;margin-top:22px">
+            <button onClick="{{ saveUpcomingForm }}" class="cdc-btn-primary" style="padding:12px 24px;font-size:12px;">Guardar</button>
+            <button onClick="{{ closeUpcomingForm }}" style="{{ adminActionBtn }};padding:12px 24px;">Cancelar</button>
           </div>
         </div>
       </sc-if>
@@ -1269,6 +1382,10 @@ class Component extends DCLogic {
     movieFormError: '',
     deleteConfirmIdx: null,
     cartaleraVersion: 0,
+    upcomingForm: null,
+    upcomingFormEditIdx: null,
+    upcomingFormError: '',
+    deleteConfirmUpcomingIdx: null,
     form: { name: '', email: '', card: '', expiry: '', cvv: '' },
     formError: '',
     payProcessing: false,
@@ -1321,6 +1438,21 @@ class Component extends DCLogic {
   }
 
   upcomingData() {
+    return this._loadStoredUpcoming() || this._defaultUpcomingData();
+  }
+  _loadStoredUpcoming() {
+    try {
+      const raw = localStorage.getItem('cdc_proximamente');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return (Array.isArray(parsed) && parsed.length) ? parsed : null;
+    } catch(e) { return null; }
+  }
+  _saveStoredUpcoming(list) {
+    try { localStorage.setItem('cdc_proximamente', JSON.stringify(list)); } catch(e) {}
+    this.setState(s => ({ cartaleraVersion: (s.cartaleraVersion||0) + 1 }));
+  }
+  _defaultUpcomingData() {
     return [
       { title:'Avatar: Fuego y Ceniza', genre:'Ciencia Ficción', duration:'3h 10m', rating:'B', sala:'IMAX', format:'IMAX 3D', poster:'', premiere:'19 Dic 2026', dateBig:'19 DIC', dateSub:'Estreno mundial', synopsis:'Jake Sully y Neytiri enfrentan una nueva amenaza que pondrá a prueba a toda la familia en Pandora.' },
       { title:'Spider-Man: Nuevo Día', genre:'Acción', duration:'2h 18m', rating:'B', sala:'1', format:'ESP 3D', poster:'', premiere:'31 Jul 2026', dateBig:'31 JUL', dateSub:'Función de medianoche', synopsis:'Peter Parker comienza un nuevo capítulo en una ciudad que aprende a confiar de nuevo en su héroe.' },
@@ -1416,6 +1548,52 @@ class Component extends DCLogic {
   };
   restoreDefaultCartelera = () => {
     try { localStorage.removeItem('cdc_cartelera'); } catch(e) {}
+    this.setState(s => ({ cartaleraVersion: (s.cartaleraVersion||0) + 1 }));
+  };
+  openAddUpcoming = () => this.setState({
+    upcomingForm: { title:'', genre:'', duration:'', rating:'AA', sala:'', format:'', premiere:'', dateBig:'', dateSub:'', synopsis:'', poster:'', premiereTime:'' },
+    upcomingFormEditIdx: null, upcomingFormError:'',
+  });
+  openEditUpcoming = (idx) => {
+    const u = this.upcomingData()[idx];
+    this.setState({
+      upcomingForm: {
+        title:u.title||'', genre:u.genre||'', duration:u.duration||'', rating:u.rating||'AA', sala:u.sala||'',
+        format:u.format||'', premiere:u.premiere||'', dateBig:u.dateBig||'', dateSub:u.dateSub||'',
+        synopsis:u.synopsis||'', poster:u.poster||'', premiereTime:u.premiereTime||'',
+      },
+      upcomingFormEditIdx: idx, upcomingFormError:'',
+    });
+  };
+  closeUpcomingForm = () => this.setState({ upcomingForm:null, upcomingFormEditIdx:null, upcomingFormError:'' });
+  setUpcomingFormField = (field, val) => this.setState(s => ({ upcomingForm: { ...s.upcomingForm, [field]: val } }));
+  saveUpcomingForm = () => {
+    const f = this.state.upcomingForm;
+    if (!f.title.trim() || !f.premiere.trim()) {
+      this.setState({ upcomingFormError: 'Título y fecha de estreno son obligatorios.' });
+      return;
+    }
+    const list = [...this.upcomingData()];
+    const newItem = {
+      title: f.title.trim(), genre: f.genre.trim(), duration: f.duration.trim(), rating: f.rating, sala: f.sala.trim(),
+      format: f.format.trim(), premiere: f.premiere.trim(), dateBig: f.dateBig.trim(), dateSub: f.dateSub.trim(),
+      synopsis: f.synopsis.trim(), poster: f.poster.trim(), premiereTime: f.premiereTime.trim(),
+    };
+    if (this.state.upcomingFormEditIdx !== null) list[this.state.upcomingFormEditIdx] = newItem;
+    else list.push(newItem);
+    this._saveStoredUpcoming(list);
+    this.setState({ upcomingForm:null, upcomingFormEditIdx:null, upcomingFormError:'' });
+  };
+  askDeleteUpcoming = (idx) => this.setState({ deleteConfirmUpcomingIdx: idx });
+  cancelDeleteUpcoming = () => this.setState({ deleteConfirmUpcomingIdx: null });
+  confirmDeleteUpcoming = (idx) => {
+    const list = [...this.upcomingData()];
+    list.splice(idx, 1);
+    this._saveStoredUpcoming(list);
+    this.setState({ deleteConfirmUpcomingIdx: null });
+  };
+  restoreDefaultUpcoming = () => {
+    try { localStorage.removeItem('cdc_proximamente'); } catch(e) {}
     this.setState(s => ({ cartaleraVersion: (s.cartaleraVersion||0) + 1 }));
   };
   pressPin = (d) => {
@@ -1764,9 +1942,11 @@ class Component extends DCLogic {
     const tabPillStyle = (active) => `cursor:pointer;border:1px solid ${active?'var(--primary)':'var(--border)'};background:${active?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${active?'#fff':'var(--gray)'};border-radius:30px;padding:9px 20px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px`;
     const payoutsTabsVm = [
       { id:'cartelera', label:'Cartelera', onClick:()=>this.setPayoutsTab('cartelera'), style:tabPillStyle(payoutsTab==='cartelera') },
+      { id:'proximamente', label:'Próximamente', onClick:()=>this.setPayoutsTab('proximamente'), style:tabPillStyle(payoutsTab==='proximamente') },
       { id:'pagos', label:'Pagos', onClick:()=>this.setPayoutsTab('pagos'), style:tabPillStyle(payoutsTab==='pagos') },
     ];
     const isPayoutsTabCartelera = payoutsTab === 'cartelera';
+    const isPayoutsTabProximamente = payoutsTab === 'proximamente';
     const isPayoutsTabPagos = payoutsTab === 'pagos';
 
     const movieForm = this.state.movieForm;
@@ -1786,6 +1966,23 @@ class Component extends DCLogic {
     const movieFormRatingOptions = movieForm ? ratingChoices.map(r => ({
       label: r, onClick: () => this.setMovieFormField('rating', r),
       style: `cursor:pointer;border-radius:8px;padding:8px 4px;font-size:11px;font-weight:800;border:1.5px solid ${movieForm.rating===r?'var(--primary)':'var(--border)'};background:${movieForm.rating===r?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${movieForm.rating===r?'#fff':'var(--gray)'}`,
+    })) : [];
+
+    const upcomingForm = this.state.upcomingForm;
+    const showUpcomingForm = !!upcomingForm;
+    const showUpcomingList = !upcomingForm;
+    const adminUpcomingVm = upcoming.map((u, idx) => ({
+      title: u.title, meta: `${u.genre} · ${u.duration} · Estreno ${u.premiere}`,
+      isConfirmingDelete: this.state.deleteConfirmUpcomingIdx === idx,
+      isNotConfirmingDelete: this.state.deleteConfirmUpcomingIdx !== idx,
+      onEdit: () => this.openEditUpcoming(idx),
+      onAskDelete: () => this.askDeleteUpcoming(idx),
+      onCancelDelete: this.cancelDeleteUpcoming,
+      onConfirmDelete: () => this.confirmDeleteUpcoming(idx),
+    }));
+    const upcomingFormRatingOptions = upcomingForm ? ratingChoices.map(r => ({
+      label: r, onClick: () => this.setUpcomingFormField('rating', r),
+      style: `cursor:pointer;border-radius:8px;padding:8px 4px;font-size:11px;font-weight:800;border:1.5px solid ${upcomingForm.rating===r?'var(--primary)':'var(--border)'};background:${upcomingForm.rating===r?'color-mix(in oklab,var(--primary) 14%,transparent)':'transparent'};color:${upcomingForm.rating===r?'#fff':'var(--gray)'}`,
     })) : [];
 
     // ── payouts / bank ──
@@ -1916,7 +2113,7 @@ class Component extends DCLogic {
         { num:'2', title:'Depósitos el mismo día', desc:'Las ventas del día caen a tu banco automáticamente, todos los días.' },
         { num:'3', title:'Todo en un panel', desc:'Consulta cuánto has recibido y el detalle de cada transferencia.' },
       ],
-      payoutsTabsVm, isPayoutsTabCartelera, isPayoutsTabPagos,
+      payoutsTabsVm, isPayoutsTabCartelera, isPayoutsTabProximamente, isPayoutsTabPagos,
       movieForm, showMovieForm, showMovieList, movieFormError: this.state.movieFormError,
       movieFormRatingOptions, adminMoviesVm, adminActionBtn,
       openAddMovie: this.openAddMovie, closeMovieForm: this.closeMovieForm, saveMovieForm: this.saveMovieForm,
@@ -1930,6 +2127,21 @@ class Component extends DCLogic {
       onMovieSchedule: (e) => this.setMovieFormField('schedule', e.target.value),
       onMovieSynopsis: (e) => this.setMovieFormField('synopsis', e.target.value),
       onMoviePoster: (e) => this.setMovieFormField('poster', e.target.value),
+      upcomingForm, showUpcomingForm, showUpcomingList, upcomingFormError: this.state.upcomingFormError,
+      upcomingFormRatingOptions, adminUpcomingVm,
+      openAddUpcoming: this.openAddUpcoming, closeUpcomingForm: this.closeUpcomingForm, saveUpcomingForm: this.saveUpcomingForm,
+      restoreDefaultUpcoming: this.restoreDefaultUpcoming,
+      onUpcomingTitle: (e) => this.setUpcomingFormField('title', e.target.value),
+      onUpcomingGenre: (e) => this.setUpcomingFormField('genre', e.target.value),
+      onUpcomingDuration: (e) => this.setUpcomingFormField('duration', e.target.value),
+      onUpcomingSala: (e) => this.setUpcomingFormField('sala', e.target.value),
+      onUpcomingFormat: (e) => this.setUpcomingFormField('format', e.target.value),
+      onUpcomingPremiere: (e) => this.setUpcomingFormField('premiere', e.target.value),
+      onUpcomingDateBig: (e) => this.setUpcomingFormField('dateBig', e.target.value),
+      onUpcomingDateSub: (e) => this.setUpcomingFormField('dateSub', e.target.value),
+      onUpcomingPremiereTime: (e) => this.setUpcomingFormField('premiereTime', e.target.value),
+      onUpcomingSynopsis: (e) => this.setUpcomingFormField('synopsis', e.target.value),
+      onUpcomingPoster: (e) => this.setUpcomingFormField('poster', e.target.value),
       banksVm, canConnect, connectBtnStyle,
       bankFormHolder: bf.holder, bankFormClabe: bf.clabe,
       clabeCountLabel: `${bf.clabe.length}/18 dígitos`,
